@@ -1,0 +1,76 @@
+
+plugins {
+    id 'org.springframework.boot' version '2.4.3'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+}
+
+group = 'plus.fort'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+
+repositories {
+    mavenCentral()
+}
+configurations {
+    all {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    }
+}
+dependencies {
+
+    implementation group: 'org.apache.sshd', name: 'sshd-core', version: '2.6.0'
+
+
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'junit:junit:4.13.1'
+    implementation 'org.projectlombok:lombok:1.18.18'
+
+    compileOnly 'org.projectlombok:lombok:1.18.18'
+    annotationProcessor 'org.projectlombok:lombok:1.18.18'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.security:spring-security-test'
+
+    implementation 'org.springframework.boot:spring-boot-starter'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+
+    compile('org.springframework.boot:spring-boot-starter-log4j2')
+
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    implementation 'org.hibernate:hibernate-core:5.4.29.Final'
+    testImplementation 'org.hibernate:hibernate-core:5.4.29.Final'
+
+    implementation group: 'org.postgresql', name: 'postgresql', version: '42.1.4'
+    testImplementation group: 'org.postgresql', name: 'postgresql', version: '42.1.4'
+
+    implementation 'org.jeasy:easy-random-core:5.0.0'
+
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.2.1'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.8.9'
+
+
+    testImplementation('org.junit.jupiter:junit-jupiter-api:5.4.2')
+    testRuntime('org.junit.jupiter:junit-jupiter-engine:5.4.2')
+
+
+}
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}
+
+test {
+    useJUnitPlatform()
+}

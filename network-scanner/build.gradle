@@ -1,0 +1,42 @@
+plugins {
+    id 'org.springframework.boot' version '2.4.2'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+}
+
+group = 'plus.fort'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+
+compileJava {
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
+}
+
+repositories {
+    mavenCentral()
+}
+configurations {
+    all {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    }
+}
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.jeasy:easy-random-core:5.0.0'
+
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.security:spring-security-test'
+
+    implementation group: 'org.jline', name: 'jline', version: '3.1.3'
+
+
+    implementation group: 'commons-cli', name: 'commons-cli', version: '1.4'
+
+    implementation 'org.hibernate:hibernate-core:5.4.29.Final'
+    testImplementation 'org.hibernate:hibernate-core:5.4.29.Final'
+
+    implementation project(':library')
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
