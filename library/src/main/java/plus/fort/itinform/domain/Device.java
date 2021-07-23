@@ -1,6 +1,7 @@
 package plus.fort.itinform.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -24,9 +25,11 @@ public class Device {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "device", cascade = {CascadeType.ALL})
     @JsonIgnore
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private List<Interface> interfaces;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private DeviceType deviceType;
 
     public Device() {

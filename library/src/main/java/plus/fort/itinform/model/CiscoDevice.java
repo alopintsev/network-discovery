@@ -6,21 +6,25 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import plus.fort.itinform.domain.CdpRecord;
+import plus.fort.itinform.domain.Connection;
 import plus.fort.itinform.domain.Device;
+import plus.fort.itinform.domain.Interface;
 import plus.fort.itinform.service.SshConnectionService;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
-public class CiscoDevice implements AutoCloseable {
+public class CiscoDevice implements AutoCloseable{
 
+    private String host;
     private static final Logger logger = LogManager.getLogger(CiscoDevice.class);
+
     @Autowired
     SshConnectionService sshConnectionService;
-    private String host;
 
     public CiscoDevice(SshConnectionService sshConnectionService) {
         this.sshConnectionService = sshConnectionService;
@@ -32,13 +36,13 @@ public class CiscoDevice implements AutoCloseable {
 
         List<CdpRecord> cdpRecords = new ArrayList<>();
 
-        try {
+        try  {
             sshConnectionService.connect(host);
             sshConnectionService.sendMessage("show cdp nei detail\n");
             response = sshConnectionService.readUntilPattern();
             cdpRecords.addAll(parseCdpNeighbors(response));
         } catch (Exception e) {
-            logger.log(Level.ERROR, "got exception when collect data from host:" + host + ", " + e.getMessage());
+            logger.log(Level.ERROR,"got exception when collect data from host:"+host+", " + e.getMessage());
         }
 
         return cdpRecords;
@@ -62,7 +66,7 @@ public class CiscoDevice implements AutoCloseable {
             cdpRecord.remoteInterface.device.setAddress(findPattern(cdpNeighbor, CiscoPatterns.remoteAddress));
             cdpRecord.remoteInterface.device.setName(findPattern(cdpNeighbor, CiscoPatterns.deviceId));
             cdpRecord.remoteInterface.setName(findPattern(cdpNeighbor, CiscoPatterns.remoteInterfacePattern));
-            cdpRecord.remotePlatform = findPattern(cdpNeighbor, CiscoPatterns.remotePlatform);
+            cdpRecord.remotePlatform =  findPattern(cdpNeighbor, CiscoPatterns.remotePlatform);
             cdpRecord.remoteInterface.device.getDeviceType().setName(findPattern(cdpNeighbor, CiscoPatterns.deviceCapability));
 
             if (cdpRecord.isValid()) {

@@ -1,12 +1,14 @@
 package plus.fort.itinform.model;
 
 import org.springframework.stereotype.Repository;
-import plus.fort.itinform.domain.Device;
-import plus.fort.itinform.domain.DeviceType;
+import plus.fort.itinform.domain.*;
 
 import javax.persistence.NoResultException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Repository
 public class DeviceModel extends BaseModel {
@@ -40,7 +42,7 @@ public class DeviceModel extends BaseModel {
     public List<Device> getDevice() {
         return getEntityManager()
                 .createQuery("from Device", Device.class)
-                .setMaxResults(2)
+                .setMaxResults(200)
                 .setFirstResult(0)
                 .getResultList();
     }
@@ -73,5 +75,45 @@ public class DeviceModel extends BaseModel {
             }
             persistData(device);
         }
+    }
+
+    public List<CdpRecord> getInterfaces(long deviceId) {
+        List<CdpRecord> result = new ArrayList<>();
+        List<Interface> localInterfaces = new ArrayList<>();
+        List<Interface> remoteInterfaces = new ArrayList<>();
+
+        try {
+            Device device = new Device();
+            device.setId(deviceId);
+
+//            record.localInterface =
+            localInterfaces = getEntityManager()
+                    .createQuery("from Interface d where d.device=:deviceId", Interface.class)
+                    .setParameter("deviceId", device)
+                    .getResultList();
+            List<Connection> connections = new ArrayList<>();
+
+            connections = localInterfaces.stream().map(Interface::getConnection).collect(Collectors.toList());
+
+            remoteInterfaces = getEntityManager()
+                    .createQuery("from Interface d where d.connection in (:connection) and d.device <> :device", Interface.class)
+                    .setParameter("connection", connections)
+                    .setParameter("device", device)
+                    .getResultList();
+
+            for(Interface interfaceRecord : localInterfaces) {
+                CdpRecord record = new CdpRecord();
+                record.localInterface = interfaceRecord;
+                record.remoteInterface = remoteInterfaces.stream().filter(p->p.getConnection().getId() == interfaceRecord.connection.getId()).collect(Collectors.toList()).get(0);
+                result.add(record);
+            }
+//            localInterfaces.stream().forEach(p->(){
+//                record.localInterface = p;
+//
+//            });
+
+        } catch (NoResultException e) {
+        }
+        return result;
     }
 }

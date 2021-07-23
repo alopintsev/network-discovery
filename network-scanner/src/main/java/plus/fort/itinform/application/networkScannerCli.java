@@ -16,6 +16,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StopWatch;
@@ -39,6 +40,8 @@ public class networkScannerCli implements CommandLineRunner {
     private static final Logger logger = LogManager.getRootLogger();
     private final NetworkModel networkModel;
 
+    @Autowired
+    ApplicationContext ctx;
     @Autowired
     UserDetailsService userDetailsService;
 

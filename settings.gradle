@@ -1,5 +1,6 @@
 rootProject.name = 'network-discovery'
 
 include 'library'
+include 'application'
 include 'network-scanner'
 

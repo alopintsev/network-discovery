@@ -1,5 +1,6 @@
 package plus.fort.itinform.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -17,10 +18,12 @@ public class Interface {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     @JoinColumn(name = "device_id", foreignKey=@ForeignKey(name="FK_INTERFACE__DEVICE"))
     public Device device;// = new Device();
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     @JoinColumn(name = "connection_id", foreignKey=@ForeignKey(name="FK_INTERFACE__CONNECTION"))
     public Connection connection;
@@ -29,6 +32,7 @@ public class Interface {
     public String name;
 
     public Interface(){}
+
     public Interface(String name, Device device) {
         this.name = name;
         this.device = device;
