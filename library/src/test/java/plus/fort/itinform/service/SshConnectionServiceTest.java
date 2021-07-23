@@ -17,7 +17,11 @@ public class SshConnectionServiceTest {
         String response = null;
         List<CdpRecord> cdpRecords = new ArrayList<>();
         try (SshConnectionService sshConnectionService = new SshConnectionService(null)) {
+<<<<<<< HEAD
             sshConnectionService.connect("10.18.209.3");
+=======
+            sshConnectionService.connect("10.0.0.1");
+>>>>>>> main
             sshConnectionService.sendMessage("show ver\n");
             response = sshConnectionService.readUntilPattern();
         } catch (Exception e) {
